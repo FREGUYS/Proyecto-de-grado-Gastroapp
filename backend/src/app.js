@@ -13,7 +13,12 @@ const { notFound, errorHandler } = require('./middleware/errorHandler');
 
 const app = express();
 
-app.use(cors({ origin: process.env.CORS_ORIGIN || '*' }));
+// CORS_ORIGIN admite varios orígenes separados por coma. https://localhost es
+// el origen de la app Android empaquetada con Capacitor.
+const corsOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(',').map((o) => o.trim())
+  : '*';
+app.use(cors({ origin: corsOrigins }));
 app.use(express.json());
 app.use(morgan('dev'));
 

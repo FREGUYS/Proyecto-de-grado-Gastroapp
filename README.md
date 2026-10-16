@@ -149,6 +149,36 @@ App disponible en `http://localhost:5173`.
 - El mapa usa tiles públicos de OpenStreetMap (sin API key) — solo requiere
   conexión a internet en el navegador.
 
+## App móvil (APK Android)
+
+El frontend se empaqueta como app Android con [Capacitor](https://capacitorjs.com/)
+(`frontend/capacitor.config.json`, proyecto nativo en `frontend/android/`). El
+APK se genera con GitHub Actions (`.github/workflows/android-apk.yml`) en cada
+push a `main` que toque `frontend/`, o a mano.
+
+1. **URL del backend**: en GitHub, ve a *Settings → Secrets and variables →
+   Actions → Variables* y crea la variable del repositorio `VITE_API_URL` con
+   la URL pública del backend terminada en `/api` (ej.
+   `https://mi-backend.example.com/api`). Opcionalmente crea también
+   `VITE_GOOGLE_CLIENT_ID` para el login con Google. La app no puede usar
+   `localhost:4000`: en el teléfono, `localhost` es el propio teléfono.
+2. **CORS**: la app Android sirve la web desde el origen `https://localhost`,
+   así que agrégalo a `CORS_ORIGIN` en el backend publicado (acepta varios
+   orígenes separados por coma), por ejemplo:
+   `CORS_ORIGIN=https://mi-frontend.example.com,https://localhost`.
+3. **Generar el APK**: en GitHub, *Actions → APK Android → Run workflow*. Al
+   terminar, descarga el artefacto `GastroApp-apk` (un .zip con
+   `app-debug.apk`) desde la página de la ejecución e instálalo en el teléfono
+   (hay que permitir la instalación de apps de origen desconocido).
+
+Para compilar en local (requiere Android Studio / Android SDK y JDK 21):
+
+```bash
+cd frontend
+npm run android:sync          # vite build + cap sync android
+cd android && ./gradlew assembleDebug
+```
+
 ## Chat de recomendaciones con IA
 
 `POST /api/chat/recommend` recibe `{ message, conversationHistory }` y responde

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">GastroApp</string>
+    <string name="title_activity_main">GastroApp</string>
+    <string name="package_name">com.gastroapp.app</string>
+    <string name="custom_url_scheme">com.gastroapp.app</string>
+</resources>
